@@ -10,24 +10,166 @@
 
 * What is FP?
 
-* What is a value
+* What is a value?
 
- - immutable vs mutable
- - referencial transparency
+A value is the final result of a computation.
 
-* What is a function
+The value of 1 + 1 is 2.
 
- - function vs method
- - pure function
- - partial function
+* What is an expression?
+
+Definition:
+
+A symbol or combination of symbols that represents a value or a
+relationship between values
+
+1 + 1 is an expression, it reduces to the value 2.
+
+2 is also an expression as well as a value.
+
+* What is evaluation?
+
+Evaluation is the reduction of an expression to its value.
+
+Evaluate:
+e- (ex-, out) + value
+"To extract the value"
+
+Example of evaluation:
+#+BEGIN_SRC python
+1 + 1 + 1
+1 + 2
+3
+#+END_SRC
+
+* What is a variable?
+
+A variable is a reference to a value.
+
+In:
+#+BEGIN_SRC python
+a = 2
+#+END_SRC
+a is a variable, referencing the value 2
+
+* What are side-effects?
+
+A side effect is a step in the evaluation of an expression that has
+effects outside of the expression itself.
+
+Examples:
+#+BEGIN_SRC python
+print "hello"
+
+a = 1; a += 1
+#+END_SRC
+
+* What is a function?
+
+An abstraction for an expression, where one or several values are the
+expression are replaced by variables.
+
+Let's abstract the following expression:
+#+BEGIN_SRC python
+1 + 1
+
+def inc (x):
+  return x + 1
+
+inc = lambda x: x + 1
+#+END_SRC
+
+Question: Is a function a value?
+
+* Routine vs Function
+
+A routine is an abstraction that do not return a value.
+#+BEGIN_SRC python
+def a (x):
+  print x
+
+def b (x):
+  return x
+#+END_SRC
+a is a routine, b is a function.
+
+A procedure can either be a routine or a function.
+
+* What is a pure function?
+
+A pure function is a side-effect free function that always maps a
+given input to the same output.
+
+Which of the following is a pure function?
+#+BEGIN_SRC python
+def inc (x):
+  return x + 1
+
+def one (x):
+  print x
+  return x
+
+def rand (x):
+  return x * random.random()
+#+END_SRC
+
+* What is application?
+
+Calling a function with some arguments is applying that function to a
+value.
+
+Abstraction and Application are the core concepts of functional
+programming.
+
+* immutable vs mutable
+
+* referencial transparency
+
+* function vs method
+* partial function
 
 * Statement vs Expression
 
-#+BEGIN_SRC clojure
-(defn test [x]
-  (+ x 2))
+Expressions return something,
+Statements return nothing.
+
+During evaluation:
+Expressions reduce to a value,
+Statements reduce to and action.
+
+** In Python:
+
+Expression:
+#+BEGIN_SRC python
+a = 1 + 1
+a = lambda x: x ** 2
 #+END_SRC
 
+Statement:
+#+BEGIN_SRC python
+if True:
+  a = "hello"
+else:
+  a = "goodbye"
+#+END_SRC
+
+** In Clojure and Haskell
+
+Only expressions
+#+BEGIN_SRC clojure
+(def a
+  (if true "hello" "goodbye"))
+#+END_SRC
+#+BEGIN_SRC haskell
+a = if True
+    then "hello"
+    else "goodbye"
+#+END_SRC
+
+** Why is that?
+
+Statements require side effects,
+intrinsically imperative.
 
 * What is polymorphism?
 
