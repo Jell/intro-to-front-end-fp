@@ -1,0 +1,43 @@
+
+#+TITLE: Introduction to Functional Programming
+
+#+AUTHOR: Jean-Louis Giordano (@jellismymind)
+
+#+DATE: <2015-04-08 Wed>
+
+#+ATTR_LATEX: :height 2cm :align center
+[[./images/clojure_logo.png]] [[./images/haskell_logo.png]] [[./images/python_logo.png]]
+
+* What is FP?
+
+* What is a value
+
+ - immutable vs mutable
+ - referencial transparency
+
+* What is a function
+
+ - function vs method
+ - pure function
+ - partial function
+
+* Statement vs Expression
+
+#+BEGIN_SRC clojure
+(defn test [x]
+  (+ x 2))
+#+END_SRC
+
+
+* What is polymorphism?
+
+ - how to achieve polymorphism in FP vs OOP?
+ - subtyping
+ - ad hoc polymorphism (method overloading)
+ - parametric polymorphism
+
+* Macros vs Monads?
+
+* Does it scale?
+
+ - Is it fast?
