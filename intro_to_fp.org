@@ -64,6 +64,49 @@ print "hello"
 a = 1; a += 1
 #+END_SRC
 
+* Statement vs Expression
+
+Expressions return something,
+Statements return nothing.
+
+During evaluation:
+Expressions reduce to a value,
+Statements reduce to and action.
+
+** In Python:
+
+Expression:
+#+BEGIN_SRC python
+a = 1 + 1
+a = lambda x: x ** 2
+#+END_SRC
+
+Statement:
+#+BEGIN_SRC python
+if True:
+  a = "hello"
+else:
+  a = "goodbye"
+#+END_SRC
+
+** In Clojure and Haskell
+
+Only expressions
+#+BEGIN_SRC clojure
+(def a
+  (if true "hello" "goodbye"))
+#+END_SRC
+#+BEGIN_SRC haskell
+a = if True
+    then "hello"
+    else "goodbye"
+#+END_SRC
+
+** Why is that?
+
+Statements require side effects,
+intrinsically imperative.
+
 * What is a function?
 
 An abstraction for an expression, where one or several values are the
@@ -127,49 +170,6 @@ programming.
 
 * function vs method
 * partial function
-
-* Statement vs Expression
-
-Expressions return something,
-Statements return nothing.
-
-During evaluation:
-Expressions reduce to a value,
-Statements reduce to and action.
-
-** In Python:
-
-Expression:
-#+BEGIN_SRC python
-a = 1 + 1
-a = lambda x: x ** 2
-#+END_SRC
-
-Statement:
-#+BEGIN_SRC python
-if True:
-  a = "hello"
-else:
-  a = "goodbye"
-#+END_SRC
-
-** In Clojure and Haskell
-
-Only expressions
-#+BEGIN_SRC clojure
-(def a
-  (if true "hello" "goodbye"))
-#+END_SRC
-#+BEGIN_SRC haskell
-a = if True
-    then "hello"
-    else "goodbye"
-#+END_SRC
-
-** Why is that?
-
-Statements require side effects,
-intrinsically imperative.
 
 * What is polymorphism?
 
