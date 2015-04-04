@@ -18,8 +18,6 @@ The value of 1 + 1 is 2.
 
 * What is an expression?
 
-Definition:
-
 A symbol or combination of symbols that represents a value or a
 relationship between values
 
@@ -41,6 +39,8 @@ Example of evaluation:
 1 + 2
 3
 #+END_SRC
+
+* TODO: Add graph here
 
 * What is a variable?
 
@@ -64,14 +64,9 @@ print "hello"
 a = 1; a += 1
 #+END_SRC
 
-* Statement vs Expression
+* Statement
 
-Expressions return something,
-Statements return nothing.
-
-During evaluation:
-Expressions reduce to a value,
-Statements reduce to and action.
+A statement is an expression that evaluates to nothing.
 
 ** In Python:
 
@@ -109,7 +104,7 @@ intrinsically imperative.
 
 * What is a function?
 
-An abstraction for an expression, where one or several values are the
+An abstraction for an expression, where one or several values in the
 expression are replaced by variables.
 
 Let's abstract the following expression:
