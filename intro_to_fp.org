@@ -153,8 +153,8 @@ def rand (x):
 
 * What is application?
 
-Calling a function with some arguments is applying that function to a
-value.
+Calling a function with some arguments is applying that function to the
+value of those arguments.
 
 Abstraction and Application are the core concepts of functional
 programming.
