@@ -219,12 +219,12 @@ f arg1 arg2
 Functions can return functions, and take functions as argument.
 
 #+BEGIN_SRC python
-def apply (f, x, y)
+def apply (f, x, y):
   return f(x, y)
 
 apply(add, 1, 2)
 
-def incrementer (n)
+def incrementer (n):
   return lambda m: m + n
 
 add2 = incrementer(2)
