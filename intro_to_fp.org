@@ -248,6 +248,7 @@ Example:
 1 + 1
 (+) 1 1
 ((+) 1) 1
+-- Currying
 #+END_SRC
 
 * Partial Application (bis)
@@ -259,7 +260,15 @@ Example:
 ((part + 1 2) 3 4)
 #+END_SRC
 
-* Function vs Method
+* How to do things?
+
+ - map
+ - filter
+ - reduce
+ - list comprehension
+ - recursion
+ - pattern matching
+ - function composition
 
 * What is polymorphism?
 
