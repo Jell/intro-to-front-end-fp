@@ -110,14 +110,39 @@ expression are replaced by variables.
 Let's abstract the following expression:
 #+BEGIN_SRC python
 1 + 1
-
 def inc (x):
   return x + 1
-
 inc = lambda x: x + 1
+#+END_SRC
+#+BEGIN_SRC clojure
+(+ 1 1)
+(def inc (fn [x] (+ x 1)))
+(defn inc [x] (+ x 1))
+#+END_SRC
+#+BEGIN_SRC haskell
+1 + 1
+inc = \x -> x + 1
+inc x = 1 + x
 #+END_SRC
 
 Question: Is a function a value?
+
+* What is a function (bis)?
+
+The number of arguments a function takes is its arity.
+#+BEGIN_SRC python
+# arity 0
+def zero ():
+  return 0
+
+# arity 1
+def inc (x):
+  return x + 1
+
+# arity 2
+def add (x, y):
+  return x + y
+#+END_SRC
 
 * Routine vs Function
 
@@ -148,23 +173,93 @@ def one (x):
   return x
 
 def rand (x):
+  # non deterministic!
   return x * random.random()
 #+END_SRC
 
-* What is application?
+* Immutable vs Mutable
 
-Calling a function with some arguments is applying that function to the
-value of those arguments.
+Immutable means that cannot change.
+Think "read only".
+
+Persistent Datastructures are immutable,
+and can't be updated in-place.
+
+* Referencial Transparency
+
+An expression that is deterministic and without side-effects is
+referencially transparent.
+
+It means it can be replaced by its value without changing the
+behaviour of the program.
+
+* What is Application?
+
+Calling a function with some arguments is applying that function to
+the value of those arguments.
 
 Abstraction and Application are the core concepts of functional
 programming.
+#+BEGIN_SRC python
+f(arg1, arg2)
+1 + 2
+#+END_SRC
+#+BEGIN_SRC clojure
+(f arg1 arg2)
+(+ 1 2)
+#+END_SRC
+#+BEGIN_SRC haskell
+f arg1 arg2
+1 + 2
+(+) 1 2
+#+END_SRC
 
-* immutable vs mutable
+* Higher order function
 
-* referencial transparency
+Functions can return functions, and take functions as argument.
 
-* function vs method
-* partial function
+#+BEGIN_SRC python
+def apply (f, x, y)
+  return f(x, y)
+
+apply(add, 1, 2)
+
+def incrementer (n)
+  return lambda m: m + n
+
+add2 = incrementer(2)
+add2(4)
+#+END_SRC
+
+* Partial Application
+
+Take a function of arity n, and m < n arguments,
+and return a function of arity n - m.
+
+Example:
+#+BEGIN_SRC clojure
+(+ 1 2 3)
+((partial +) 1 2 3)
+((partial + 1) 2 3)
+((partial + 1 2) 3)
+((partial + 1 2 3))
+#+END_SRC
+#+BEGIN_SRC haskell
+1 + 1
+(+) 1 1
+((+) 1) 1
+#+END_SRC
+
+* Partial Application (bis)
+#+BEGIN_SRC clojure
+(defn part [f & args]
+  (fn [& rest]
+    (apply f (concat args rest))))
+
+((part + 1 2) 3 4)
+#+END_SRC
+
+* Function vs Method
 
 * What is polymorphism?
 
