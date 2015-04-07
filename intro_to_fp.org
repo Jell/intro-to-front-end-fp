@@ -147,8 +147,8 @@ intrinsically imperative.
 
 * What is a function?
 
-An abstraction for an expression, where one or several values in the
-expression are replaced by variables.
+A function is an abstraction for an expression, where one or several
+values in the expression are replaced by variables.
 
 Let's abstract the following expression:
 #+BEGIN_SRC python
