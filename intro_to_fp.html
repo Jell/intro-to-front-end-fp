@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Introduction to Functional Programming</title>
-<!-- 2015-04-04 Sat 23:26 -->
+<!-- 2015-04-06 Mon 18:44 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Jean-Louis Giordano (@jellismymind)" />
@@ -148,24 +148,45 @@ for the JavaScript code in this tag.
 <li><a href="#sec-4">4. What is evaluation?</a></li>
 <li><a href="#sec-5">5. What is a variable?</a></li>
 <li><a href="#sec-6">6. What are side-effects?</a></li>
-<li><a href="#sec-7">7. What is a function?</a></li>
-<li><a href="#sec-8">8. Routine vs Function</a></li>
-<li><a href="#sec-9">9. What is a pure function?</a></li>
-<li><a href="#sec-10">10. What is application?</a></li>
-<li><a href="#sec-11">11. immutable vs mutable</a></li>
-<li><a href="#sec-12">12. referencial transparency</a></li>
-<li><a href="#sec-13">13. function vs method</a></li>
-<li><a href="#sec-14">14. partial function</a></li>
-<li><a href="#sec-15">15. Statement vs Expression</a>
+<li><a href="#sec-7">7. Statement</a>
 <ul>
-<li><a href="#sec-15-1">15.1. In Python:</a></li>
-<li><a href="#sec-15-2">15.2. In Clojure and Haskell</a></li>
-<li><a href="#sec-15-3">15.3. Why is that?</a></li>
+<li><a href="#sec-7-1">7.1. In Python:</a></li>
+<li><a href="#sec-7-2">7.2. In Clojure and Haskell</a></li>
+<li><a href="#sec-7-3">7.3. Why is that?</a></li>
 </ul>
 </li>
-<li><a href="#sec-16">16. What is polymorphism?</a></li>
-<li><a href="#sec-17">17. Macros vs Monads?</a></li>
-<li><a href="#sec-18">18. Does it scale?</a></li>
+<li><a href="#sec-8">8. What is a function?</a></li>
+<li><a href="#sec-9">9. What is the arity of a function?</a></li>
+<li><a href="#sec-10">10. Routine vs Function</a></li>
+<li><a href="#sec-11">11. What is a pure function?</a></li>
+<li><a href="#sec-12">12. Immutable vs Mutable</a></li>
+<li><a href="#sec-13">13. Referencial Transparency</a></li>
+<li><a href="#sec-14">14. What is Application?</a></li>
+<li><a href="#sec-15">15. Higher order function</a></li>
+<li><a href="#sec-16">16. Partial Application</a></li>
+<li><a href="#sec-17">17. Partial Application (bis)</a></li>
+<li><a href="#sec-18">18. How to do things?</a>
+<ul>
+<li><a href="#sec-18-1">18.1. map</a></li>
+<li><a href="#sec-18-2">18.2. filter</a></li>
+<li><a href="#sec-18-3">18.3. reduce / fold</a></li>
+<li><a href="#sec-18-4">18.4. list comprehension</a></li>
+<li><a href="#sec-18-5">18.5. recursion</a></li>
+<li><a href="#sec-18-6">18.6. pattern matching</a></li>
+<li><a href="#sec-18-7">18.7. function composition</a></li>
+</ul>
+</li>
+<li><a href="#sec-19">19. What are Types?</a></li>
+<li><a href="#sec-20">20. What is polymorphism?</a>
+<ul>
+<li><a href="#sec-20-1">20.1. how to achieve polymorphism in FP vs OOP?</a></li>
+<li><a href="#sec-20-2">20.2. subtyping</a></li>
+<li><a href="#sec-20-3">20.3. ad hoc polymorphism (function overloading)</a></li>
+<li><a href="#sec-20-4">20.4. parametric polymorphism</a></li>
+</ul>
+</li>
+<li><a href="#sec-21">21. Macros vs Monads?</a></li>
+<li><a href="#sec-22">22. Does it scale?</a></li>
 </ul>
 </div>
 </div>
@@ -193,10 +214,6 @@ The value of 1 + 1 is 2.
 <div id="outline-container-sec-3" class="outline-2">
 <h2 id="sec-3"><span class="section-number-2">3</span> What is an expression?</h2>
 <div class="outline-text-2" id="text-3">
-<p>
-Definition:
-</p>
-
 <p>
 A symbol or combination of symbols that represents a value or a
 relationship between values
@@ -235,6 +252,22 @@ Example of evaluation:
 3
 </pre>
 </div>
+
+<pre class="example">
++------------+
+| Expression |
++------------+
+      |
+      V
++------------+
+| Evaluation |
++------------+
+      |
+      V
++------------+
+|   Value    |
++------------+
+</pre>
 </div>
 </div>
 
@@ -277,137 +310,36 @@ Examples:
 a = 1; a += 1
 </pre>
 </div>
+
+<pre class="example">
++------------+
+| Expression |
++------------+
+      |
+      V
++------------+
+| Evaluation |~~~&gt; Side Effect
++------------+
+      |
+      V
++------------+
+|   Value    |
++------------+
+</pre>
 </div>
 </div>
 
 <div id="outline-container-sec-7" class="outline-2">
-<h2 id="sec-7"><span class="section-number-2">7</span> What is a function?</h2>
+<h2 id="sec-7"><span class="section-number-2">7</span> Statement</h2>
 <div class="outline-text-2" id="text-7">
 <p>
-An abstraction for an expression, where one or several values are the
-expression are replaced by variables.
-</p>
-
-<p>
-Let's abstract the following expression:
-</p>
-<div class="org-src-container">
-
-<pre class="src src-python">1 + 1
-
-def inc (x):
-  return x + 1
-
-inc = lambda x: x + 1
-</pre>
-</div>
-
-<p>
-Question: Is a function a value?
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-8" class="outline-2">
-<h2 id="sec-8"><span class="section-number-2">8</span> Routine vs Function</h2>
-<div class="outline-text-2" id="text-8">
-<p>
-A routine is an abstraction that do not return a value.
-</p>
-<div class="org-src-container">
-
-<pre class="src src-python">def a (x):
-  print x
-
-def b (x):
-  return x
-</pre>
-</div>
-<p>
-a is a routine, b is a function.
-</p>
-
-<p>
-A procedure can either be a routine or a function.
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-9" class="outline-2">
-<h2 id="sec-9"><span class="section-number-2">9</span> What is a pure function?</h2>
-<div class="outline-text-2" id="text-9">
-<p>
-A pure function is a side-effect free function that always maps a
-given input to the same output.
-</p>
-
-<p>
-Which of the following is a pure function?
-</p>
-<div class="org-src-container">
-
-<pre class="src src-python">def inc (x):
-  return x + 1
-
-def one (x):
-  print x
-  return x
-
-def rand (x):
-  return x * random.random()
-</pre>
-</div>
-</div>
-</div>
-
-<div id="outline-container-sec-10" class="outline-2">
-<h2 id="sec-10"><span class="section-number-2">10</span> What is application?</h2>
-<div class="outline-text-2" id="text-10">
-<p>
-Calling a function with some arguments is applying that function to a
-value.
-</p>
-
-<p>
-Abstraction and Application are the core concepts of functional
-programming.
-</p>
-</div>
-</div>
-
-<div id="outline-container-sec-11" class="outline-2">
-<h2 id="sec-11"><span class="section-number-2">11</span> immutable vs mutable</h2>
-</div>
-
-<div id="outline-container-sec-12" class="outline-2">
-<h2 id="sec-12"><span class="section-number-2">12</span> referencial transparency</h2>
-</div>
-
-<div id="outline-container-sec-13" class="outline-2">
-<h2 id="sec-13"><span class="section-number-2">13</span> function vs method</h2>
-</div>
-<div id="outline-container-sec-14" class="outline-2">
-<h2 id="sec-14"><span class="section-number-2">14</span> partial function</h2>
-</div>
-
-<div id="outline-container-sec-15" class="outline-2">
-<h2 id="sec-15"><span class="section-number-2">15</span> Statement vs Expression</h2>
-<div class="outline-text-2" id="text-15">
-<p>
-Expressions return something,
-Statements return nothing.
-</p>
-
-<p>
-During evaluation:
-Expressions reduce to a value,
-Statements reduce to and action.
+A statement is an expression that evaluates to nothing.
 </p>
 </div>
 
-<div id="outline-container-sec-15-1" class="outline-3">
-<h3 id="sec-15-1"><span class="section-number-3">15.1</span> In Python:</h3>
-<div class="outline-text-3" id="text-15-1">
+<div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1"><span class="section-number-3">7.1</span> In Python:</h3>
+<div class="outline-text-3" id="text-7-1">
 <p>
 Expression:
 </p>
@@ -432,9 +364,9 @@ else:
 </div>
 </div>
 
-<div id="outline-container-sec-15-2" class="outline-3">
-<h3 id="sec-15-2"><span class="section-number-3">15.2</span> In Clojure and Haskell</h3>
-<div class="outline-text-3" id="text-15-2">
+<div id="outline-container-sec-7-2" class="outline-3">
+<h3 id="sec-7-2"><span class="section-number-3">7.2</span> In Clojure and Haskell</h3>
+<div class="outline-text-3" id="text-7-2">
 <p>
 Only expressions
 </p>
@@ -454,40 +386,364 @@ Only expressions
 </div>
 </div>
 
-<div id="outline-container-sec-15-3" class="outline-3">
-<h3 id="sec-15-3"><span class="section-number-3">15.3</span> Why is that?</h3>
-<div class="outline-text-3" id="text-15-3">
+<div id="outline-container-sec-7-3" class="outline-3">
+<h3 id="sec-7-3"><span class="section-number-3">7.3</span> Why is that?</h3>
+<div class="outline-text-3" id="text-7-3">
 <p>
 Statements require side effects,
 intrinsically imperative.
 </p>
+
+<pre class="example">
++------------+
+| Expression |
++------------+
+      |
+      V
++------------+
+| Evaluation |~~~&gt; Side Effect
++------------+
+      |
+      V
+      X
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> What is a function?</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+An abstraction for an expression, where one or several values in the
+expression are replaced by variables.
+</p>
+
+<p>
+Let's abstract the following expression:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-python">1 + 1
+
+def inc (x):
+  return x + 1
+
+inc = lambda x: x + 1
+</pre>
+</div>
+<div class="org-src-container">
+
+<pre class="src src-clojure">(+ 1 1)
+(def inc (fn [x] (+ x 1)))
+(defn inc [x] (+ x 1))
+</pre>
+</div>
+<div class="org-src-container">
+
+<pre class="src src-haskell">1 + 1
+inc = \x -&gt; x + 1
+inc x = 1 + x
+</pre>
+</div>
+
+<p>
+Question: Is a function a value?
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> What is the arity of a function?</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+The number of arguments a function takes is its arity.
+</p>
+<div class="org-src-container">
+
+<pre class="src src-python"># arity 0
+def zero ():
+  return 0
+
+# arity 1
+def inc (x):
+  return x + 1
+
+# arity 2
+def add (x, y):
+  return x + y
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10"><span class="section-number-2">10</span> Routine vs Function</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+A routine is an abstraction that do not return a value.
+</p>
+<div class="org-src-container">
+
+<pre class="src src-python">def a (x):
+  print x
+
+def b (x):
+  return x
+</pre>
+</div>
+<p>
+a is a routine, b is a function.
+</p>
+
+<p>
+A procedure can either be a routine or a function.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11"><span class="section-number-2">11</span> What is a pure function?</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+A pure function is a side-effect free function that always maps a
+given input to the same output.
+</p>
+
+<p>
+Which of the following is a pure function?
+</p>
+<div class="org-src-container">
+
+<pre class="src src-python">def inc (x):
+  return x + 1
+
+def one (x):
+  print x
+  return x
+
+def rand (x):
+  # non deterministic!
+  return x * random.random()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12"><span class="section-number-2">12</span> Immutable vs Mutable</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+Immutable means that cannot change.
+Think "read only".
+</p>
+
+<p>
+Persistent Datastructures are immutable,
+and can't be updated in-place.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13"><span class="section-number-2">13</span> Referencial Transparency</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+An expression that is deterministic and without side-effects is
+referencially transparent.
+</p>
+
+<p>
+It means it can be replaced by its value without changing the
+behaviour of the program.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14"><span class="section-number-2">14</span> What is Application?</h2>
+<div class="outline-text-2" id="text-14">
+<p>
+Calling a function with some arguments is applying that function to
+the value of those arguments.
+</p>
+
+<p>
+Abstraction and Application are the core concepts of functional
+programming.
+</p>
+<div class="org-src-container">
+
+<pre class="src src-python">f(arg1, arg2)
+1 + 2
+</pre>
+</div>
+<div class="org-src-container">
+
+<pre class="src src-clojure">(f arg1 arg2)
+(+ 1 2)
+</pre>
+</div>
+<div class="org-src-container">
+
+<pre class="src src-haskell">f arg1 arg2
+1 + 2
+(+) 1 2
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-15" class="outline-2">
+<h2 id="sec-15"><span class="section-number-2">15</span> Higher order function</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+Functions can return functions, and take functions as argument.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-python">def apply (f, x, y):
+  return f(x, y)
+
+apply(add, 1, 2)
+
+def incrementer (n):
+  return lambda m: m + n
+
+add2 = incrementer(2)
+add2(4)
+</pre>
 </div>
 </div>
 </div>
 
 <div id="outline-container-sec-16" class="outline-2">
-<h2 id="sec-16"><span class="section-number-2">16</span> What is polymorphism?</h2>
+<h2 id="sec-16"><span class="section-number-2">16</span> Partial Application</h2>
 <div class="outline-text-2" id="text-16">
-<ul class="org-ul">
-<li>how to achieve polymorphism in FP vs OOP?
-</li>
-<li>subtyping
-</li>
-<li>ad hoc polymorphism (method overloading)
-</li>
-<li>parametric polymorphism
-</li>
-</ul>
+<p>
+Take a function of arity n, and m &lt; n arguments,
+and return a function of arity n - m.
+</p>
+
+<p>
+Example:
+</p>
+<div class="org-src-container">
+
+<pre class="src src-clojure">(+ 1 2 3)
+((partial +) 1 2 3)
+((partial + 1) 2 3)
+((partial + 1 2) 3)
+((partial + 1 2 3))
+</pre>
+</div>
+<div class="org-src-container">
+
+<pre class="src src-haskell">1 + 1
+(+) 1 1
+((+) 1) 1
+-- Currying
+</pre>
+</div>
 </div>
 </div>
 
 <div id="outline-container-sec-17" class="outline-2">
-<h2 id="sec-17"><span class="section-number-2">17</span> Macros vs Monads?</h2>
+<h2 id="sec-17"><span class="section-number-2">17</span> Partial Application (bis)</h2>
+<div class="outline-text-2" id="text-17">
+<div class="org-src-container">
+
+<pre class="src src-clojure">(defn part [f &amp; args]
+  (fn [&amp; rest]
+    (apply f (concat args rest))))
+
+((part + 1 2) 3 4)
+</pre>
+</div>
+</div>
 </div>
 
 <div id="outline-container-sec-18" class="outline-2">
-<h2 id="sec-18"><span class="section-number-2">18</span> Does it scale?</h2>
+<h2 id="sec-18"><span class="section-number-2">18</span> How to do things?</h2>
 <div class="outline-text-2" id="text-18">
+</div><div id="outline-container-sec-18-1" class="outline-3">
+<h3 id="sec-18-1"><span class="section-number-3">18.1</span> map</h3>
+</div>
+<div id="outline-container-sec-18-2" class="outline-3">
+<h3 id="sec-18-2"><span class="section-number-3">18.2</span> filter</h3>
+</div>
+<div id="outline-container-sec-18-3" class="outline-3">
+<h3 id="sec-18-3"><span class="section-number-3">18.3</span> reduce / fold</h3>
+</div>
+<div id="outline-container-sec-18-4" class="outline-3">
+<h3 id="sec-18-4"><span class="section-number-3">18.4</span> list comprehension</h3>
+</div>
+<div id="outline-container-sec-18-5" class="outline-3">
+<h3 id="sec-18-5"><span class="section-number-3">18.5</span> recursion</h3>
+</div>
+<div id="outline-container-sec-18-6" class="outline-3">
+<h3 id="sec-18-6"><span class="section-number-3">18.6</span> pattern matching</h3>
+</div>
+<div id="outline-container-sec-18-7" class="outline-3">
+<h3 id="sec-18-7"><span class="section-number-3">18.7</span> function composition</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-19" class="outline-2">
+<h2 id="sec-19"><span class="section-number-2">19</span> What are Types?</h2>
+<div class="outline-text-2" id="text-19">
+<p>
+Types are sets of values.
+</p>
+
+<p>
+1 belongs to several types: it's an Integer, a Number, a Value,
+the value 1.
+</p>
+
+<p>
+One of the elements of the set of all Values.
+</p>
+
+<p>
+One of the elements of the set of all Integers.
+</p>
+
+<p>
+The only element in the set of all values that are 1.
+</p>
+
+<p>
+1 has the type Value, Integer, Being 1
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-20" class="outline-2">
+<h2 id="sec-20"><span class="section-number-2">20</span> What is polymorphism?</h2>
+<div class="outline-text-2" id="text-20">
+</div><div id="outline-container-sec-20-1" class="outline-3">
+<h3 id="sec-20-1"><span class="section-number-3">20.1</span> how to achieve polymorphism in FP vs OOP?</h3>
+</div>
+<div id="outline-container-sec-20-2" class="outline-3">
+<h3 id="sec-20-2"><span class="section-number-3">20.2</span> subtyping</h3>
+</div>
+<div id="outline-container-sec-20-3" class="outline-3">
+<h3 id="sec-20-3"><span class="section-number-3">20.3</span> ad hoc polymorphism (function overloading)</h3>
+</div>
+<div id="outline-container-sec-20-4" class="outline-3">
+<h3 id="sec-20-4"><span class="section-number-3">20.4</span> parametric polymorphism</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-21" class="outline-2">
+<h2 id="sec-21"><span class="section-number-2">21</span> Macros vs Monads?</h2>
+</div>
+
+<div id="outline-container-sec-22" class="outline-2">
+<h2 id="sec-22"><span class="section-number-2">22</span> Does it scale?</h2>
+<div class="outline-text-2" id="text-22">
 <ul class="org-ul">
 <li>Is it fast?
 </li>
@@ -498,7 +754,7 @@ intrinsically imperative.
 <div id="postamble" class="status">
 <p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2015-04-08 Wed&gt;</span></span></p>
 <p class="author">Author: Jean-Louis Giordano (@jellismymind)</p>
-<p class="date">Created: 2015-04-04 Sat 23:26</p>
+<p class="date">Created: 2015-04-06 Mon 18:44</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>

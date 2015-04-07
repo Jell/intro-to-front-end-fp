@@ -40,7 +40,21 @@ Example of evaluation:
 3
 #+END_SRC
 
-* TODO: Add graph here
+#+BEGIN_SRC
++------------+
+| Expression |
++------------+
+      |
+      V
++------------+
+| Evaluation |
++------------+
+      |
+      V
++------------+
+|   Value    |
++------------+
+#+END_SRC
 
 * What is a variable?
 
@@ -62,6 +76,22 @@ Examples:
 print "hello"
 
 a = 1; a += 1
+#+END_SRC
+
+#+BEGIN_SRC
++------------+
+| Expression |
++------------+
+      |
+      V
++------------+
+| Evaluation |~~~> Side Effect
++------------+
+      |
+      V
++------------+
+|   Value    |
++------------+
 #+END_SRC
 
 * Statement
@@ -102,6 +132,20 @@ a = if True
 Statements require side effects,
 intrinsically imperative.
 
+#+BEGIN_SRC
++------------+
+| Expression |
++------------+
+      |
+      V
++------------+
+| Evaluation |~~~> Side Effect
++------------+
+      |
+      V
+      X
+#+END_SRC
+
 * What is a function?
 
 An abstraction for an expression, where one or several values in the
@@ -110,8 +154,10 @@ expression are replaced by variables.
 Let's abstract the following expression:
 #+BEGIN_SRC python
 1 + 1
+
 def inc (x):
   return x + 1
+
 inc = lambda x: x + 1
 #+END_SRC
 #+BEGIN_SRC clojure
@@ -127,7 +173,7 @@ inc x = 1 + x
 
 Question: Is a function a value?
 
-* What is a function (bis)?
+* What is the arity of a function?
 
 The number of arguments a function takes is its arity.
 #+BEGIN_SRC python
@@ -262,20 +308,35 @@ Example:
 
 * How to do things?
 
- - map
- - filter
- - reduce
- - list comprehension
- - recursion
- - pattern matching
- - function composition
+** map
+** filter
+** reduce / fold
+** list comprehension
+** recursion
+** pattern matching
+** function composition
+
+* What are Types?
+
+Types are sets of values.
+
+1 belongs to several types: it's an Integer, a Number, a Value,
+the value 1.
+
+One of the elements of the set of all Values.
+
+One of the elements of the set of all Integers.
+
+The only element in the set of all values that are 1.
+
+1 has the type Value, Integer, Being 1
 
 * What is polymorphism?
 
- - how to achieve polymorphism in FP vs OOP?
- - subtyping
- - ad hoc polymorphism (method overloading)
- - parametric polymorphism
+** how to achieve polymorphism in FP vs OOP?
+** subtyping
+** ad hoc polymorphism (function overloading)
+** parametric polymorphism
 
 * Macros vs Monads?
 
