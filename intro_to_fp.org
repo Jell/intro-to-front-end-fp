@@ -134,7 +134,7 @@ intrinsically imperative.
 
 #+BEGIN_SRC
 +------------+
-| Expression |
+| Statement  |
 +------------+
       |
       V
