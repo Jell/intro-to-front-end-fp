@@ -142,7 +142,6 @@ intrinsically imperative.
 | Evaluation |~~~> Side Effect
 +------------+
       |
-      V
       X
 #+END_SRC
 
@@ -309,12 +308,46 @@ Example:
 * How to do things?
 
 ** map
+#+BEGIN_SRC clojure
+(map inc [1 2 3])
+#+END_SRC
 ** filter
+#+BEGIN_SRC clojure
+(filter even? [1 2 3 4])
+#+END_SRC
 ** reduce / fold
+#+BEGIN_SRC clojure
+(reduce + [1 2 3])
+#+END_SRC
 ** list comprehension
+#+BEGIN_SRC clojure
+(for [x (range 1 10) :when (even? x)
+      y (range 1 10) :when (odd? y)]
+  (* x y))
+#+END_SRC
 ** recursion
+#+BEGIN_SRC clojure
+(defn factorial [n]
+  (if (zero? n)
+    1
+    (* n factorial)))
+#+END_SRC
 ** pattern matching
+#+BEGIN_SRC haskell
+factorial 0 = 1
+factorial n = n * factorial (n - 1)
+#+END_SRC
 ** function composition
+#+BEGIN_SRC clojure
+(def twice (partial * 2))
+(def thrice (partial * 3))
+(def six-times (comp twice thrice))
+#+END_SRC
+#+BEGIN_SRC haskell
+twice = (*) 2
+thrice = (*) 3
+sixtimes = twice . thrice
+#+END_SRC
 
 * What are Types?
 
@@ -333,13 +366,68 @@ The only element in the set of all values that are 1.
 
 * What is polymorphism?
 
-** how to achieve polymorphism in FP vs OOP?
+** ad hoc polymorphism
+#+BEGIN_SRC clojure
+(defrecord Cow [spotted?])
+(defrecord Duck [daffy?])
+(defmulti talk type)
+(defmethod talk Cow [_] "Muuu")
+(defmethod talk Duck [_] "Quack Quack")
+
+(talk (map->Cow {:spotted? true}))
+(talk (map->Duck {:daffy? true}))
+#+END_SRC
 ** subtyping
-** ad hoc polymorphism (function overloading)
+#+BEGIN_SRC clojure
+(defrecord Cow [spotted?])
+(defrecord Ostrich [height])
+(defrecord Duck [daffy?])
+(defrecord Goose [silly?])
+(defrecord Dog [grumpy?])
+
+(def h
+  (-> (make-hierarchy)
+      (derive ::bird ::animal)
+      (derive Dog ::animal)
+      (derive Cow ::animal)
+      (derive Duck ::bird)
+      (derive Goose ::bird)
+      (derive Ostrich ::bird)))
+
+(defn dispatch [v] (type v))
+
+(defmulti flies? #'dispatch :hierarchy #'h)
+
+(defmethod flies? ::animal  [_] false)
+(defmethod flies? ::bird    [_] true)
+(defmethod flies? Ostrich [_] false)
+(defmethod flies? Duck [duck] (not (:daffy? duck)))
+
+(flies? #user.Cow{:spotted? true})
+(flies? #user.Goose{:silly? true})
+(flies? #user.Ostrich{:height 100})
+(flies? #user.Duck{:daffy? true})
+(flies? #user.Duck{:daffy? false})
+#+END_SRC
+
 ** parametric polymorphism
+#+BEGIN_SRC clojure
+(defn walk [animal]
+  ((get animal :walk) animal))
 
-* Macros vs Monads?
+(walk {:species :Duck,
+       :daffy? false,
+       :walk (fn [duck]
+               (if (:daffy? duck) "run" "wobble"))})
+(walk {:species :Horse, :walk (fn [_] "gallop")})
 
-* Does it scale?
+(defn walk-a-lot [animal]
+  (take 3 (repeatedly (partial walk animal))))
 
- - Is it fast?
+(walk-a-lot {:species :Duck,
+             :daffy? false,
+             :walk (fn [duck]
+                     (if (:daffy? duck) "run" "wobble"))})
+(walk-a-lot {:species :Horse,
+             :walk (fn [_] "gallop")})
+#+END_SRC
