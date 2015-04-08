@@ -29,8 +29,7 @@ relationship between values
 
 Evaluation is the reduction of an expression to its value.
 
-Evaluate:
-e- (ex-, out) + value
+Evaluate: e- (ex-, out) + value
 "To extract the value"
 
 Example of evaluation:
@@ -39,7 +38,6 @@ Example of evaluation:
 1 + 2
 3
 #+END_SRC
-
 #+BEGIN_SRC
 +------------+
 | Expression |
@@ -225,7 +223,7 @@ def rand (x):
 * Immutable vs Mutable
 
 Immutable means that cannot change.
-Think "read only".
+Think "read only", "constants".
 
 Persistent Datastructures are immutable,
 and can't be updated in-place.
@@ -319,7 +317,7 @@ Example:
 #+BEGIN_SRC clojure
 (reduce + [1 2 3])
 #+END_SRC
-** list comprehension
+** list comprehension / generators
 #+BEGIN_SRC clojure
 (for [x (range 1 10) :when (even? x)
       y (range 1 10) :when (odd? y)]
@@ -412,22 +410,19 @@ The only element in the set of all values that are 1.
 
 ** parametric polymorphism
 #+BEGIN_SRC clojure
-(defn walk [animal]
-  ((get animal :walk) animal))
+data Duck = Duck | DaffyDuck
+data Horse = Horse
 
-(walk {:species :Duck,
-       :daffy? false,
-       :walk (fn [duck]
-               (if (:daffy? duck) "run" "wobble"))})
-(walk {:species :Horse, :walk (fn [_] "gallop")})
+class Walker a where
+  walk :: a -> String
 
-(defn walk-a-lot [animal]
-  (take 3 (repeatedly (partial walk animal))))
+instance Walker Duck where
+  walk Duck = "wobble"
+  walk DaffyDuck = "run"
 
-(walk-a-lot {:species :Duck,
-             :daffy? false,
-             :walk (fn [duck]
-                     (if (:daffy? duck) "run" "wobble"))})
-(walk-a-lot {:species :Horse,
-             :walk (fn [_] "gallop")})
+instance Walker Horse where
+  walk horse = "gallop"
+
+walk_a_lot :: Walker a => a -> [String]
+walk_a_lot walker = take 3 $ repeat (walk walker)
 #+END_SRC
