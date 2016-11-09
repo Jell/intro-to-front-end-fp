@@ -401,11 +401,11 @@ The only element in the set of all values that are 1.
 (defmethod flies? Ostrich [_] false)
 (defmethod flies? Duck [duck] (not (:daffy? duck)))
 
-(flies? #user.Cow{:spotted? true})
-(flies? #user.Goose{:silly? true})
-(flies? #user.Ostrich{:height 100})
-(flies? #user.Duck{:daffy? true})
-(flies? #user.Duck{:daffy? false})
+(flies? (map->Cow {:spotted? true}))
+(flies? (map->Goose {:silly? true}))
+(flies? (map->Ostrich {:height 100}))
+(flies? (map->Duck {:daffy? true}))
+(flies? (map->Duck {:daffy? false}))
 #+END_SRC
 
 ** parametric polymorphism
