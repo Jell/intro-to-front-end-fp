@@ -3,10 +3,10 @@
 
 #+AUTHOR: Jean-Louis Giordano (@jellismymind)
 
-#+DATE: <2015-04-08 Wed>
+#+DATE: <2016-11-22 Tue>
 
 #+ATTR_LATEX: :height 2cm :align center
-[[./images/clojure_logo.png]] [[./images/haskell_logo.png]] [[./images/python_logo.png]]
+[[./images/cljs_logo.png]] [[./images/purescript_logo.png]] [[./images/js_logo.png]]
 
 * What is FP?
 
@@ -33,7 +33,7 @@ Evaluate: e- (ex-, out) + value
 "To extract the value"
 
 Example of evaluation:
-#+BEGIN_SRC python
+#+BEGIN_SRC javascript
 1 + 1 + 1
 1 + 2
 3
@@ -59,8 +59,8 @@ Example of evaluation:
 A variable is a reference to a value.
 
 In:
-#+BEGIN_SRC python
-a = 2
+#+BEGIN_SRC javascript
+a = 2;
 #+END_SRC
 a is a variable, referencing the value 2
 
@@ -70,10 +70,10 @@ A side effect is a step in the evaluation of an expression that has
 effects outside of the expression itself.
 
 Examples:
-#+BEGIN_SRC python
-print "hello"
+#+BEGIN_SRC javascript
+console.log("hello");
 
-a = 1; a += 1
+a = 1; a += 1;
 #+END_SRC
 
 #+BEGIN_SRC
@@ -99,17 +99,18 @@ A statement is an expression that evaluates to nothing.
 ** In Python:
 
 Expression:
-#+BEGIN_SRC python
-a = 1 + 1
-a = lambda x: x ** 2
+#+BEGIN_SRC javascript
+a = 1 + 1;
+a = (x) => x ** 2;
 #+END_SRC
 
 Statement:
-#+BEGIN_SRC python
-if True:
+#+BEGIN_SRC javascript
+if(true) {
   a = "hello"
-else:
+} else {
   a = "goodbye"
+}
 #+END_SRC
 
 ** In Clojure and Haskell
