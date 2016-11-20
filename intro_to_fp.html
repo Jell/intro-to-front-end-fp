@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Introduction to Functional Programming</title>
-<!-- 2015-04-08 Wed 21:34 -->
+<!-- 2016-11-20 Sun 16:21 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Jean-Louis Giordano (@jellismymind)" />
@@ -150,7 +150,7 @@ for the JavaScript code in this tag.
 <li><a href="#sec-6">6. What are side-effects?</a></li>
 <li><a href="#sec-7">7. Statement</a>
 <ul>
-<li><a href="#sec-7-1">7.1. In Python:</a></li>
+<li><a href="#sec-7-1">7.1. In JavaScript:</a></li>
 <li><a href="#sec-7-2">7.2. In Clojure and Haskell</a></li>
 <li><a href="#sec-7-3">7.3. Why is that?</a></li>
 </ul>
@@ -188,7 +188,7 @@ for the JavaScript code in this tag.
 </div>
 </div>
 <p>
-<img src="./images/clojure_logo.png" alt="clojure_logo.png" /> <img src="./images/haskell_logo.png" alt="haskell_logo.png" /> <img src="./images/python_logo.png" alt="python_logo.png" />
+<img src="./images/cljs_logo.png" alt="cljs_logo.png" /> <img src="./images/elm_logo.png" alt="elm_logo.png" /> <img src="./images/js_logo.png" alt="js_logo.png" />
 </p>
 
 <div id="outline-container-sec-1" class="outline-2">
@@ -243,7 +243,7 @@ Example of evaluation:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-python">1 + 1 + 1
+<pre class="src src-javascript">1 + 1 + 1
 1 + 2
 3
 </pre>
@@ -278,7 +278,7 @@ In:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-python">a = 2
+<pre class="src src-javascript">var a = 2;
 </pre>
 </div>
 <p>
@@ -300,9 +300,9 @@ Examples:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-python">print "hello"
+<pre class="src src-javascript">console.log("hello");
 
-a = 1; a += 1
+a = 1; a += 1;
 </pre>
 </div>
 
@@ -333,15 +333,15 @@ A statement is an expression that evaluates to nothing.
 </div>
 
 <div id="outline-container-sec-7-1" class="outline-3">
-<h3 id="sec-7-1"><span class="section-number-3">7.1</span> In Python:</h3>
+<h3 id="sec-7-1"><span class="section-number-3">7.1</span> In JavaScript:</h3>
 <div class="outline-text-3" id="text-7-1">
 <p>
 Expression:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-python">a = 1 + 1
-a = lambda x: x ** 2
+<pre class="src src-javascript">1 + 1;
+(x) =&gt; x ** 2;
 </pre>
 </div>
 
@@ -350,10 +350,7 @@ Statement:
 </p>
 <div class="org-src-container">
 
-<pre class="src src-python">if True:
-  a = "hello"
-else:
-  a = "goodbye"
+<pre class="src src-javascript">var a = 1;
 </pre>
 </div>
 </div>
@@ -373,7 +370,7 @@ Only expressions
 </div>
 <div class="org-src-container">
 
-<pre class="src src-haskell">a = if True
+<pre class="src src-elm">a = if True
     then "hello"
     else "goodbye"
 </pre>
@@ -420,10 +417,9 @@ Let's abstract the following expression:
 
 <pre class="src src-python">1 + 1
 
-def inc (x):
-  return x + 1
-
-inc = lambda x: x + 1
+inc = function (x) { return x + 1; };
+inc = (x) =&gt; {return x + 1;};
+inc = (x) =&gt; x + 1;
 </pre>
 </div>
 <div class="org-src-container">
@@ -435,7 +431,7 @@ inc = lambda x: x + 1
 </div>
 <div class="org-src-container">
 
-<pre class="src src-haskell">1 + 1
+<pre class="src src-elm">1 + 1
 inc = \x -&gt; x + 1
 inc x = 1 + x
 </pre>
@@ -455,17 +451,17 @@ The number of arguments a function takes is its arity.
 </p>
 <div class="org-src-container">
 
-<pre class="src src-python"># arity 0
-def zero ():
-  return 0
+<pre class="src src-javascript">// arity 0
+zero = () =&gt; 0;
 
-# arity 1
-def inc (x):
-  return x + 1
+// arity 1
+inc = (x) =&gt; x + 1;
 
-# arity 2
-def add (x, y):
-  return x + y
+// arity 2
+add = (x, y) =&gt; x + y;
+
+// infinite arity
+countArgs = (...args) =&gt; args.length;
 </pre>
 </div>
 </div>
@@ -479,11 +475,13 @@ A routine is an abstraction that do not return a value.
 </p>
 <div class="org-src-container">
 
-<pre class="src src-python">def a (x):
-  print x
+<pre class="src src-python">a = (x) =&gt; {
+  console.log(x);
+}
 
-def b (x):
-  return x
+b = (x) =&gt; {
+  return x;
+};
 </pre>
 </div>
 <p>
@@ -509,16 +507,25 @@ Which of the following is a pure function?
 </p>
 <div class="org-src-container">
 
-<pre class="src src-python">def inc (x):
-  return x + 1
+<pre class="src src-python">a = (x) =&gt; x + 1;
 
-def one (x):
-  print x
-  return x
+b = (x) =&gt; {
+  console.log(x);
+  return x;
+};
 
-def rand (x):
-  # non deterministic!
-  return x * random.random()
+c = (x) =&gt; x * Math.random();
+
+d = (x) =&gt; x.push("hello");
+
+e = (x) =&gt; {
+  var result = [];
+  while (x &gt; 0) {
+    result.unshift(x);
+    x--;
+  }
+  return result;
+};
 </pre>
 </div>
 </div>
@@ -568,8 +575,8 @@ programming.
 </p>
 <div class="org-src-container">
 
-<pre class="src src-python">f(arg1, arg2)
-1 + 2
+<pre class="src src-javascript">f(arg1, arg2);
+1 + 2;
 </pre>
 </div>
 <div class="org-src-container">
@@ -580,7 +587,7 @@ programming.
 </div>
 <div class="org-src-container">
 
-<pre class="src src-haskell">f arg1 arg2
+<pre class="src src-elm">f arg1 arg2
 1 + 2
 (+) 1 2
 </pre>
@@ -634,7 +641,7 @@ Example:
 </div>
 <div class="org-src-container">
 
-<pre class="src src-haskell">1 + 1
+<pre class="src src-elm">1 + 1
 (+) 1 1
 ((+) 1) 1
 -- Currying
@@ -721,8 +728,15 @@ Example:
 <div class="outline-text-3" id="text-18-6">
 <div class="org-src-container">
 
-<pre class="src src-haskell">factorial 0 = 1
-factorial n = n * factorial (n - 1)
+<pre class="src src-elm">-- Lists in Elm
+[1,2,3] == (1 :: 2 :: 3 :: [])
+[1,2,3] == 1 :: [2,3]
+
+eval things = case things of
+               [] -&gt; ""
+               ["surprise", x] -&gt; String.concat [x, "!!!"]
+               "concat" :: rest -&gt; String.concat rest
+               _ -&gt; "no match"
 </pre>
 </div>
 </div>
@@ -732,16 +746,18 @@ factorial n = n * factorial (n - 1)
 <div class="outline-text-3" id="text-18-7">
 <div class="org-src-container">
 
-<pre class="src src-clojure">(def twice (partial * 2))
-(def thrice (partial * 3))
-(def six-times (comp twice thrice))
+<pre class="src src-clojure">(def inc (partial + 1))
+(def twice (partial * 2))
+(def inc-and-double (comp twice inc))
+(def double-and-inc (comp inc twice))
 </pre>
 </div>
 <div class="org-src-container">
 
-<pre class="src src-haskell">twice = (*) 2
-thrice = (*) 3
-sixtimes = twice . thrice
+<pre class="src src-elm">inc = (+) 1
+twice = (*) 2
+incAndDouble = inc &gt;&gt; twice
+doubleAndInc = inc &lt;&lt; twice
 </pre>
 </div>
 </div>
@@ -827,11 +843,11 @@ The only element in the set of all values that are 1.
 (defmethod flies? Ostrich [_] false)
 (defmethod flies? Duck [duck] (not (:daffy? duck)))
 
-(flies? #user.Cow{:spotted? true})
-(flies? #user.Goose{:silly? true})
-(flies? #user.Ostrich{:height 100})
-(flies? #user.Duck{:daffy? true})
-(flies? #user.Duck{:daffy? false})
+(flies? (map-&gt;Cow {:spotted? true}))
+(flies? (map-&gt;Goose {:silly? true}))
+(flies? (map-&gt;Ostrich {:height 100}))
+(flies? (map-&gt;Duck {:daffy? true}))
+(flies? (map-&gt;Duck {:daffy? false}))
 </pre>
 </div>
 </div>
@@ -842,21 +858,29 @@ The only element in the set of all values that are 1.
 <div class="outline-text-3" id="text-20-3">
 <div class="org-src-container">
 
-<pre class="src src-clojure">data Duck = Duck | DaffyDuck
-data Horse = Horse
+<pre class="src src-haskell">data KindOfDuck = Duck | DaffyDuck
+
+instance Show KindOfDuck where
+  show Duck = "Duck"
+  show DaffyDuck = "DaffyDuck"
+
+data KindOfHorse = Horse deriving (Show)
 
 class Walker a where
   walk :: a -&gt; String
 
-instance Walker Duck where
+instance Walker KindOfDuck where
   walk Duck = "wobble"
   walk DaffyDuck = "run"
 
-instance Walker Horse where
+instance Walker KindOfHorse where
   walk horse = "gallop"
 
-walk_a_lot :: Walker a =&gt; a -&gt; [String]
-walk_a_lot walker = take 3 $ repeat (walk walker)
+walkTheSame :: Walker a, Walker b =&gt; a -&gt; b -&gt; Bool
+walkTheSame a b = (walk a) == (walk b)
+
+bunchWalk :: Walker a =&gt; [a] -&gt; [String]
+bunchWalk = map walk
 </pre>
 </div>
 </div>
@@ -864,10 +888,10 @@ walk_a_lot walker = take 3 $ repeat (walk walker)
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2015-04-08 Wed&gt;</span></span></p>
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2016-11-22 Tue&gt;</span></span></p>
 <p class="author">Author: Jean-Louis Giordano (@jellismymind)</p>
-<p class="date">Created: 2015-04-08 Wed 21:34</p>
-<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.4.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="date">Created: 2016-11-20 Sun 16:21</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.1.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
