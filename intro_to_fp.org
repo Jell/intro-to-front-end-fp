@@ -417,11 +417,14 @@ The only element in the set of all values that are 1.
 1 has the type Value, Integer, Being 1
 
 * What is polymorphism?
+A function that provides a single interface for different types.
 
 ** ad hoc polymorphism
+
 #+BEGIN_SRC clojure
 (defrecord Cow [spotted?])
 (defrecord Duck [daffy?])
+
 (defmulti talk type)
 (defmethod talk Cow [_] "Muuu")
 (defmethod talk Duck [_] "Quack Quack")
@@ -429,6 +432,7 @@ The only element in the set of all values that are 1.
 (talk (map->Cow {:spotted? true}))
 (talk (map->Duck {:daffy? true}))
 #+END_SRC
+
 ** subtyping
 #+BEGIN_SRC clojure
 (defrecord Cow [spotted?])
@@ -462,29 +466,35 @@ The only element in the set of all values that are 1.
 (flies? (map->Duck {:daffy? false}))
 #+END_SRC
 
+
 ** parametric polymorphism
-#+BEGIN_SRC haskell
-data KindOfDuck = Duck | DaffyDuck
+Also known as "generics"
 
-instance Show KindOfDuck where
-  show Duck = "Duck"
-  show DaffyDuck = "DaffyDuck"
+#+BEGIN_SRC elm
+List.map
 
-data KindOfHorse = Horse deriving (Show)
+type alias Point2D a = {a | x : Float, y : Float}
 
-class Walker a where
-  walk :: a -> String
+move : Float -> Float -> Point2D a -> Point2D a
+move x y point = {point | x = (.x point) + x,
+                          y = (.y point) + y}
+#+END_SRC
 
-instance Walker KindOfDuck where
-  walk Duck = "wobble"
-  walk DaffyDuck = "run"
+Note: in Elm, map is "polymorphic" because lists have different types:
+#+BEGIN_SRC elm
+[1,2,3] : List Float
+["1", "2", "3"] : List String
+[{x=0,y=0}, {x=1,y=0}] : List Point2D {}
+#+END_SRC
 
-instance Walker KindOfHorse where
-  walk horse = "gallop"
+But in ClojureScript and JavaScript, all lists have the same type.
+#+BEGIN_SRC javascript
+typeof [1,2,3];
+typeof ["1","2","3"];
+#+END_SRC
 
-walkTheSame :: Walker a, Walker b => a -> b -> Bool
-walkTheSame a b = (walk a) == (walk b)
-
-bunchWalk :: Walker a => [a] -> [String]
-bunchWalk = map walk
+#+BEGIN_SRC clojure
+(type [1 2 3])
+(type ["1" "2" "3"])
+(type [{:x 0 :y 0}])
 #+END_SRC
