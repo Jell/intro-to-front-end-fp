@@ -1,3 +1,7 @@
 /.DS_Store
 /ltxpng/
 /intro_to_fp.tex
+/elm/elm-package.json
+elm/elm-stuff
+/elm/elm.js
+clojurescript/examples/

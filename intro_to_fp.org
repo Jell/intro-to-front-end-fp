@@ -6,7 +6,7 @@
 #+DATE: <2016-11-22 Tue>
 
 #+ATTR_LATEX: :height 2cm :align center
-[[./images/cljs_logo.png]] [[./images/purescript_logo.png]] [[./images/js_logo.png]]
+[[./images/cljs_logo.png]] [[./images/elm_logo.png]] [[./images/js_logo.png]]
 
 * What is FP?
 
@@ -60,7 +60,7 @@ A variable is a reference to a value.
 
 In:
 #+BEGIN_SRC javascript
-a = 2;
+var a = 2;
 #+END_SRC
 a is a variable, referencing the value 2
 
@@ -96,21 +96,17 @@ a = 1; a += 1;
 
 A statement is an expression that evaluates to nothing.
 
-** In Python:
+** In JavaScript:
 
 Expression:
 #+BEGIN_SRC javascript
-a = 1 + 1;
-a = (x) => x ** 2;
+1 + 1;
+(x) => x ** 2;
 #+END_SRC
 
 Statement:
 #+BEGIN_SRC javascript
-if(true) {
-  a = "hello"
-} else {
-  a = "goodbye"
-}
+var a = 1;
 #+END_SRC
 
 ** In Clojure and Haskell
@@ -120,7 +116,7 @@ Only expressions
 (def a
   (if true "hello" "goodbye"))
 #+END_SRC
-#+BEGIN_SRC haskell
+#+BEGIN_SRC elm
 a = if True
     then "hello"
     else "goodbye"
@@ -153,17 +149,16 @@ Let's abstract the following expression:
 #+BEGIN_SRC python
 1 + 1
 
-def inc (x):
-  return x + 1
-
-inc = lambda x: x + 1
+inc = function (x) { return x + 1; };
+inc = (x) => {return x + 1;};
+inc = (x) => x + 1;
 #+END_SRC
 #+BEGIN_SRC clojure
 (+ 1 1)
 (def inc (fn [x] (+ x 1)))
 (defn inc [x] (+ x 1))
 #+END_SRC
-#+BEGIN_SRC haskell
+#+BEGIN_SRC elm
 1 + 1
 inc = \x -> x + 1
 inc x = 1 + x
@@ -174,29 +169,31 @@ Question: Is a function a value?
 * What is the arity of a function?
 
 The number of arguments a function takes is its arity.
-#+BEGIN_SRC python
-# arity 0
-def zero ():
-  return 0
+#+BEGIN_SRC javascript
+// arity 0
+zero = () => 0;
 
-# arity 1
-def inc (x):
-  return x + 1
+// arity 1
+inc = (x) => x + 1;
 
-# arity 2
-def add (x, y):
-  return x + y
+// arity 2
+add = (x, y) => x + y;
+
+// infinite arity
+countArgs = (...args) => args.length;
 #+END_SRC
 
 * Routine vs Function
 
 A routine is an abstraction that do not return a value.
 #+BEGIN_SRC python
-def a (x):
-  print x
+a = (x) => {
+  console.log(x);
+}
 
-def b (x):
-  return x
+b = (x) => {
+  return x;
+};
 #+END_SRC
 a is a routine, b is a function.
 
@@ -209,16 +206,25 @@ given input to the same output.
 
 Which of the following is a pure function?
 #+BEGIN_SRC python
-def inc (x):
-  return x + 1
+a = (x) => x + 1;
 
-def one (x):
-  print x
-  return x
+b = (x) => {
+  console.log(x);
+  return x;
+};
 
-def rand (x):
-  # non deterministic!
-  return x * random.random()
+c = (x) => x * Math.random();
+
+d = (x) => x.push("hello");
+
+e = (x) => {
+  var result = [];
+  while (x > 0) {
+    result.unshift(x);
+    x--;
+  }
+  return result;
+};
 #+END_SRC
 
 * Immutable vs Mutable
@@ -244,15 +250,15 @@ the value of those arguments.
 
 Abstraction and Application are the core concepts of functional
 programming.
-#+BEGIN_SRC python
-f(arg1, arg2)
-1 + 2
+#+BEGIN_SRC javascript
+f(arg1, arg2);
+1 + 2;
 #+END_SRC
 #+BEGIN_SRC clojure
 (f arg1 arg2)
 (+ 1 2)
 #+END_SRC
-#+BEGIN_SRC haskell
+#+BEGIN_SRC elm
 f arg1 arg2
 1 + 2
 (+) 1 2
@@ -288,7 +294,7 @@ Example:
 ((partial + 1 2) 3)
 ((partial + 1 2 3))
 #+END_SRC
-#+BEGIN_SRC haskell
+#+BEGIN_SRC elm
 1 + 1
 (+) 1 1
 ((+) 1) 1
@@ -332,20 +338,29 @@ Example:
     (* n factorial)))
 #+END_SRC
 ** pattern matching
-#+BEGIN_SRC haskell
-factorial 0 = 1
-factorial n = n * factorial (n - 1)
+#+BEGIN_SRC elm
+-- Lists in Elm
+[1,2,3] == (1 :: 2 :: 3 :: [])
+[1,2,3] == 1 :: [2,3]
+
+eval things = case things of
+               [] -> ""
+               ["surprise", x] -> String.concat [x, "!!!"]
+               "concat" :: rest -> String.concat rest
+               _ -> "no match"
 #+END_SRC
 ** function composition
 #+BEGIN_SRC clojure
+(def inc (partial + 1))
 (def twice (partial * 2))
-(def thrice (partial * 3))
-(def six-times (comp twice thrice))
+(def inc-and-double (comp twice inc))
+(def double-and-inc (comp inc twice))
 #+END_SRC
-#+BEGIN_SRC haskell
+#+BEGIN_SRC elm
+inc = (+) 1
 twice = (*) 2
-thrice = (*) 3
-sixtimes = twice . thrice
+incAndDouble = inc >> twice
+doubleAndInc = inc << twice
 #+END_SRC
 
 * What are Types?
@@ -410,20 +425,28 @@ The only element in the set of all values that are 1.
 #+END_SRC
 
 ** parametric polymorphism
-#+BEGIN_SRC clojure
-data Duck = Duck | DaffyDuck
-data Horse = Horse
+#+BEGIN_SRC haskell
+data KindOfDuck = Duck | DaffyDuck
+
+instance Show KindOfDuck where
+  show Duck = "Duck"
+  show DaffyDuck = "DaffyDuck"
+
+data KindOfHorse = Horse deriving (Show)
 
 class Walker a where
   walk :: a -> String
 
-instance Walker Duck where
+instance Walker KindOfDuck where
   walk Duck = "wobble"
   walk DaffyDuck = "run"
 
-instance Walker Horse where
+instance Walker KindOfHorse where
   walk horse = "gallop"
 
-walk_a_lot :: Walker a => a -> [String]
-walk_a_lot walker = take 3 $ repeat (walk walker)
+walkTheSame :: Walker a, Walker b => a -> b -> Bool
+walkTheSame a b = (walk a) == (walk b)
+
+bunchWalk :: Walker a => [a] -> [String]
+bunchWalk = map walk
 #+END_SRC
