@@ -4,8 +4,13 @@
 
 #+DATE: <2016-11-22 Tue>
 
-#+ATTR_LATEX: :height 2cm :align center
+
+#+LATEX: \clearpage
+
+#+ATTR_LATEX: :height 4cm :align center
 [[./images/cljs_logo.png]] [[./images/elm_logo.png]] [[./images/js_logo.png]]
+
+#+LATEX: \clearpage
 
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/readtheorg.css"/>
