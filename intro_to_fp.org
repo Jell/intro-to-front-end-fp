@@ -421,6 +421,9 @@ A function that provides a single interface for different types.
 
 ** ad hoc polymorphism
 
+The same function has a different implementation depending on the type
+of its inputs when applied.
+
 #+BEGIN_SRC clojure
 (defrecord Cow [spotted?])
 (defrecord Duck [daffy?])
@@ -433,7 +436,22 @@ A function that provides a single interface for different types.
 (talk (map->Duck {:daffy? true}))
 #+END_SRC
 
+#+BEGIN_SRC javascript
+function Cow (spotted) { this.spotted = spotted; };
+Cow.prototype.type = Cow;
+
+function Duck (daffy) { this.daffy = daffy; };
+Duck.prototype.type = Duck;
+
+var talk = (x) => talk[x.type](x);
+
+talk[Cow] = (cow) => "Muuu";
+talk[Duck] = (duck) => duck.daffy ? "What's up?" : "Quack Quack";
+#+END_SRC
+
 ** subtyping
+
+
 #+BEGIN_SRC clojure
 (defrecord Cow [spotted?])
 (defrecord Ostrich [height])
@@ -441,18 +459,16 @@ A function that provides a single interface for different types.
 (defrecord Goose [silly?])
 (defrecord Dog [grumpy?])
 
-(def h
-  (-> (make-hierarchy)
-      (derive ::bird ::animal)
-      (derive Dog ::animal)
-      (derive Cow ::animal)
-      (derive Duck ::bird)
-      (derive Goose ::bird)
-      (derive Ostrich ::bird)))
+(derive ::bird ::animal)
+(derive Dog ::animal)
+(derive Cow ::animal)
+(derive Duck ::bird)
+(derive Goose ::bird)
+(derive Ostrich ::bird)
 
 (defn dispatch [v] (type v))
 
-(defmulti flies? #'dispatch :hierarchy #'h)
+(defmulti flies? #'dispatch)
 
 (defmethod flies? ::animal  [_] false)
 (defmethod flies? ::bird    [_] true)

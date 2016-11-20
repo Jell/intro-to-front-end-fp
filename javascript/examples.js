@@ -108,3 +108,39 @@ var mapBis = (fn, things) =>
     );
 
 mapBis(inc, [1,2,3]);
+
+
+
+
+
+// Ad-hoc polymorphism
+function Cow (spotted) { this.spotted = spotted; };
+Cow.prototype.type = Cow;
+
+function Duck (daffy) { this.daffy = daffy; };
+Duck.prototype.type = Duck;
+
+var talk = (x) => talk[x.type](x);
+
+talk[Cow] = (cow) => "Muuu";
+talk[Duck] = (duck) => duck.daffy ? "What's up?" : "Quack Quack";
+
+// subtyping
+class Animal {
+  constructor () {}
+  alive () { return true; }
+  canFly () { return false; }
+}
+
+class Bird extends Animal {
+  canFly () { return true; }
+}
+
+class Ostrich extends Bird {
+  canFly () { return false; }
+}
+
+class Duck extends Bird {
+  constructor (daffy) { super().daffy = daffy; }
+  canFly () { return !this.daffy;}
+}
