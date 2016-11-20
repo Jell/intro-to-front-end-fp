@@ -1,7 +1,9 @@
 module Examples
 import String
 
-if True then "hello" else "goodbye"
+x = if True then "hello" else "goodbye"
+
+match = {x=1, y=2} == {x=1, y=2}
 
 inc = \x -> x + 1
 {- or -}

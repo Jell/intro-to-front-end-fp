@@ -27,6 +27,41 @@ A value is the final result of a computation.
 
 The value of 1 + 1 is 2.
 
+* What is equality?
+
+Two values are equal if they are the same at any point in time.
+
+#+BEGIN_SRC javascript
+1 === 1;
+"hello" === "hello";
+a = {x: 1, y: 2};
+b = {x: 1, y: 2};
+c = a;
+a === b; //=> false
+a === c; //=> true
+[] === []; //=> false
+{x: 1, y: 2} === {x: 1, y: 2}
+#+END_SRC
+
+#+BEGIN_SRC clojure
+(= {:x 1, :y 2} {:x 1, :y 2})
+#+END_SRC
+
+#+BEGIN_SRC elm
+{x=1, y=2} == {x=1, y=2}
+#+END_SRC
+
+* Immutable vs Mutable values
+
+Values that never change over time are immutable.
+
+In JavaScript, numbers and strings are immutable, arrays and objects
+are mutable. So it's easy to compare numbers and strings, but hard to
+compare arrays and objects.
+
+In ClojureScript and Elm, all values are immutable by default.
+
+
 * What is an expression?
 
 A symbol or combination of symbols that represents a value or a
@@ -237,14 +272,6 @@ e = (x) => {
   return result;
 };
 #+END_SRC
-
-* Immutable vs Mutable
-
-Immutable means that cannot change.
-Think "read only", "constants".
-
-Persistent Datastructures are immutable,
-and can't be updated in-place.
 
 * Referencial Transparency
 
