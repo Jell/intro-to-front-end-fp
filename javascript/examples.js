@@ -1,5 +1,6 @@
 "hello";
 
+alert("hello");
 a = "hello";
 
 a;
@@ -59,7 +60,65 @@ addbis(1,2);
 
 
 
+
+
+
+
+var myForEach = (things, f) => {
+  for(var i = 0; i < things.length; i++) {
+    f(things[i])
+  }
+}
+
+
+var myMap = (f, things) => {
+  var mapped = [];
+  myForEach(things, (e) => mapped.push(f(e)))
+  return mapped
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 [1,2,3].map(inc);
+
+var map = (fn, things) => {
+  var mapped = []
+  for(var i = 0; i < things.length; i++) {
+    mapped.push(fn(things[i]))
+  }
+  return mapped
+}
+
+
+
+
+var myReduce = (f, init, things) => {
+  var accu = init;
+  things.forEach((thing) => accu = f(accu, thing))
+  return accu;
+}
+
+
+
+
+
+
+
+
+
 
 var map = (fn, things) => {
   var mapped = [];
@@ -115,15 +174,12 @@ mapBis(inc, [1,2,3]);
 
 // Ad-hoc polymorphism
 function Cow (spotted) { this.spotted = spotted; };
-Cow.prototype.type = Cow;
-
 function Duck (daffy) { this.daffy = daffy; };
-Duck.prototype.type = Duck;
 
-var talk = (x) => talk[x.type](x);
+var talk = (x) => talk[x.constructor.name](x);
 
-talk[Cow] = (cow) => "Muuu";
-talk[Duck] = (duck) => duck.daffy ? "What's up?" : "Quack Quack";
+talk.Cow = (cow) => "Muuu";
+talk.Duck = (duck) => duck.daffy ? "What's up?" : "Quack Quack";
 
 // subtyping
 class Animal {
@@ -140,7 +196,7 @@ class Ostrich extends Bird {
   canFly () { return false; }
 }
 
-class Duck extends Bird {
+class Ducky extends Bird {
   constructor (daffy) { super().daffy = daffy; }
   canFly () { return !this.daffy;}
 }

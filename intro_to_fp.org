@@ -2,7 +2,7 @@
 
 #+AUTHOR: Jean-Louis Giordano (@jellismymind)
 
-#+DATE: <2016-11-22 Tue>
+#+DATE: <2017-02-21 Tue>
 
 
 #+LATEX: \clearpage
@@ -192,7 +192,7 @@ A function is an abstraction for an expression, where one or several
 values in the expression are replaced by variables.
 
 Let's abstract the following expression:
-#+BEGIN_SRC python
+#+BEGIN_SRC javascript
 1 + 1
 
 inc = function (x) { return x + 1; };
@@ -211,6 +211,27 @@ inc x = 1 + x
 #+END_SRC
 
 Question: Is a function a value?
+
+* What is Application?
+
+Calling a function with some arguments is applying that function to
+the value of those arguments.
+
+Abstraction and Application are the core concepts of functional
+programming.
+#+BEGIN_SRC javascript
+f(arg1, arg2);
+1 + 2;
+#+END_SRC
+#+BEGIN_SRC clojure
+(f arg1 arg2)
+(+ 1 2)
+#+END_SRC
+#+BEGIN_SRC elm
+f arg1 arg2
+1 + 2
+(+) 1 2
+#+END_SRC
 
 * What is the arity of a function?
 
@@ -232,7 +253,7 @@ countArgs = (...args) => args.length;
 * Routine vs Function
 
 A routine is an abstraction that do not return a value.
-#+BEGIN_SRC python
+#+BEGIN_SRC javascript
 a = (x) => {
   console.log(x);
 }
@@ -251,7 +272,7 @@ A pure function is a side-effect free function that always maps a
 given input to the same output.
 
 Which of the following is a pure function?
-#+BEGIN_SRC python
+#+BEGIN_SRC javascript
 a = (x) => x + 1;
 
 b = (x) => {
@@ -281,42 +302,19 @@ referencially transparent.
 It means it can be replaced by its value without changing the
 behaviour of the program.
 
-* What is Application?
-
-Calling a function with some arguments is applying that function to
-the value of those arguments.
-
-Abstraction and Application are the core concepts of functional
-programming.
-#+BEGIN_SRC javascript
-f(arg1, arg2);
-1 + 2;
-#+END_SRC
-#+BEGIN_SRC clojure
-(f arg1 arg2)
-(+ 1 2)
-#+END_SRC
-#+BEGIN_SRC elm
-f arg1 arg2
-1 + 2
-(+) 1 2
-#+END_SRC
-
 * Higher order function
 
 Functions can return functions, and take functions as argument.
 
-#+BEGIN_SRC python
-def apply (f, x, y):
-  return f(x, y)
+#+BEGIN_SRC javascript
+var apply = (f, x, y) => f(x, y);
 
-apply(add, 1, 2)
+apply(add, 2, 3);
 
-def incrementer (n):
-  return lambda m: m + n
+var makeIncrementer = (n) => (m) => m + n;
 
-add2 = incrementer(2)
-add2(4)
+var add6 = makeIncrementer(6);
+add6(4);
 #+END_SRC
 
 * Partial Application
@@ -350,32 +348,32 @@ Example:
 
 * How to do things?
 
+
 ** map
 #+BEGIN_SRC clojure
 (map inc [1 2 3])
 #+END_SRC
+
 ** filter
 #+BEGIN_SRC clojure
 (filter even? [1 2 3 4])
 #+END_SRC
+
 ** reduce / fold
 #+BEGIN_SRC clojure
-(reduce + [1 2 3])
+(reduce + 0 [1 2 3])
 #+END_SRC
-** list comprehension / generators
-#+BEGIN_SRC clojure
-(for [x (range 1 10) :when (even? x)
-      y (range 1 10) :when (odd? y)]
-  (* x y))
-#+END_SRC
+
 ** recursion
 #+BEGIN_SRC clojure
 (defn factorial [n]
   (if (zero? n)
     1
-    (* n factorial)))
+    (* n (factorial (- n 1)))))
 #+END_SRC
+
 ** pattern matching
+
 #+BEGIN_SRC elm
 -- Lists in Elm
 [1,2,3] == (1 :: 2 :: 3 :: [])
@@ -387,7 +385,9 @@ eval things = case things of
                "concat" :: rest -> String.concat rest
                _ -> "no match"
 #+END_SRC
+
 ** function composition
+
 #+BEGIN_SRC clojure
 (def inc (partial + 1))
 (def twice (partial * 2))
@@ -400,6 +400,7 @@ twice = (*) 2
 incAndDouble = inc >> twice
 doubleAndInc = inc << twice
 #+END_SRC
+
 
 * What are Types?
 
@@ -417,9 +418,10 @@ The only element in the set of all values that are 1.
 1 has the type Value, Integer, Being 1
 
 * What is polymorphism?
+
 A function that provides a single interface for different types.
 
-** ad hoc polymorphism
+* ad hoc polymorphism
 
 The same function has a different implementation depending on the type
 of its inputs when applied.
@@ -438,18 +440,19 @@ of its inputs when applied.
 
 #+BEGIN_SRC javascript
 function Cow (spotted) { this.spotted = spotted; };
-Cow.prototype.type = Cow;
-
 function Duck (daffy) { this.daffy = daffy; };
-Duck.prototype.type = Duck;
 
-var talk = (x) => talk[x.type](x);
+var talk = (x) => talk[x.constructor.name](x);
 
-talk[Cow] = (cow) => "Muuu";
-talk[Duck] = (duck) => duck.daffy ? "What's up?" : "Quack Quack";
+talk.Cow = (cow) => "Muuu";
+talk.Duck = (duck) => duck.daffy ? "What's up?" : "Quack Quack";
+
+talk(new Duck(true));
+talk(new Cow(false));
+
 #+END_SRC
 
-** subtyping
+* subtyping
 
 
 #+BEGIN_SRC clojure
@@ -483,7 +486,7 @@ talk[Duck] = (duck) => duck.daffy ? "What's up?" : "Quack Quack";
 #+END_SRC
 
 
-** parametric polymorphism
+* parametric polymorphism
 Also known as "generics"
 
 #+BEGIN_SRC elm
